@@ -3,7 +3,7 @@ version: '3.8'
 services:
   urlshortener:
     build: ./
-    command: -db postgresql
+    command: -db postgresql  # параметры запуска сервра
     ports:
       - "8080:8080"
     depends_on:
