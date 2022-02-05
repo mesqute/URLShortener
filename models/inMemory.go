@@ -69,6 +69,7 @@ func (i *inMemory) findFreeToken() (token string) {
 		_, ok := i.items[link]
 		if !ok {
 			token = link
+			return
 		}
 	}
 }

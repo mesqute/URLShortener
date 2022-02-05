@@ -23,6 +23,7 @@ func main() {
 	}
 
 	// запуск сервера
+	log.Printf("Запуск сервера на %s, активная БД: %s", server.Addr, *base)
 	err := server.ListenAndServe()
 	if err != nil {
 		log.Fatal(err)

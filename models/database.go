@@ -20,8 +20,12 @@ func SetDB(name string) {
 	case "in-memory":
 		db = &inMemory{items: make(map[string]value)}
 	case "postgresql":
-		connStr := "user=postgres password=0000 dbname=productdb sslmode=disable"
+		connStr := "user=postgres host=db dbname=postgres password=0000 sslmode=disable"
 		base, err := sql.Open("postgres", connStr)
+		if err != nil {
+			log.Fatal(err)
+		}
+		err = base.Ping()
 		if err != nil {
 			log.Fatal(err)
 		}
