@@ -12,7 +12,7 @@ type postgreSQL struct {
 
 // Get возвращает полный URL, соответствующий заданной ссылке
 func (p *postgreSQL) Get(link string) (URL string, err error) {
-	row := p.db.QueryRow("SELECT url FROM urls WHERE link = ?", link)
+	row := p.db.QueryRow("SELECT url FROM urls WHERE link = $1", link)
 	err = row.Scan(&URL)
 	return
 }
@@ -20,15 +20,13 @@ func (p *postgreSQL) Get(link string) (URL string, err error) {
 // Insert добавляет в БД заданный URL и возвращает сгенерированную ссылку
 func (p *postgreSQL) Insert(URL string) (link string, err error) {
 	var _link string
-
 	// проверка, есть ли добавляемый ULR в БД
-	row := p.db.QueryRow("SELECT * FROM urls WHERE url = $1", URL)
+	row := p.db.QueryRow("SELECT link FROM urls WHERE url = $1", URL)
 	checkError := row.Scan(&_link)
 	if checkError == nil { // если такой URL уже существует в БД
 		link = _link // возвращает сгенерированную ранее ссылку
 		return
 	}
-
 	link = p.findFreeToken()
 	_, err = p.db.Exec("INSERT INTO urls (url, link) VALUES ($1, $2)", URL, link)
 	return
